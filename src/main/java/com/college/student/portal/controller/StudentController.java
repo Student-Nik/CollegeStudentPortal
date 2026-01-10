@@ -1,5 +1,7 @@
 package com.college.student.portal.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ public class StudentController {
 	}
 
 	@PostMapping("/api/auth/student/register")
-	public ResponseEntity<String> registerStudent(@Valid @RequestBody StudentDTO studentDto){
+	public ResponseEntity<Map<String, Object>> registerStudent(@Valid @RequestBody StudentDTO studentDto){
 		return studentService.registerStudent(studentDto);
 	}
 }

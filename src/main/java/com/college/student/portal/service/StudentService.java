@@ -1,35 +1,44 @@
 package com.college.student.portal.service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.StudentDTO;
 import com.college.student.portal.entity.Student;
+import com.college.student.portal.enums.Role;
 import com.college.student.portal.repository.StudentRepository;
+import com.college.student.portal.security.JwtUtil;
 
 @Service
 public class StudentService {
 	
 	private final StudentRepository studentRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtUtil jwtUtil;
+	private final AuthenticationManager authenticationManager;
 	
-	public StudentService(StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
+	public StudentService(StudentRepository studentRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil,
+			AuthenticationManager authenticationManager) {
 		super();
 		this.studentRepository = studentRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.jwtUtil = jwtUtil;
+		this.authenticationManager = authenticationManager;
 	}
 
-	public ResponseEntity<String> registerStudent(StudentDTO studentDto){
+	public ResponseEntity<Map<String,Object>> registerStudent(StudentDTO studentDto){
 		
 		Optional<Student> isExistingStudent = studentRepository.findByEmail(studentDto.getEmail());
 		
 		if(isExistingStudent.isPresent()) {
 			return ResponseEntity.status(HttpStatus.FOUND)
-					.body("This E-mail is already exists!");
+					.body(Map.of("message","This E-mail already exists, please try another one!"));
 		}else {
 			Student student = new Student();
 			student.setRollNumber(studentDto.getRollNumber());
@@ -43,11 +52,17 @@ public class StudentService {
 			student.setAddress(studentDto.getAddress());
 			student.setCreatedAt(studentDto.getCreatedAt());
 			
+			student.setRole(Role.STUDENT);
+			
 			studentRepository.save(student);
 			
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body("Student registered successfully!");
-		}
-		
+					.body(Map.of("message","Student Registration Successful!",
+							"role",student.getRole()));
+		}	
 	}
+	
+	
+	
+	
 }

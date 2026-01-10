@@ -1,5 +1,6 @@
 package com.college.student.portal.service;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.FacultyDTO;
 import com.college.student.portal.entity.Faculty;
+import com.college.student.portal.enums.Role;
 import com.college.student.portal.repository.FacultyRepository;
 
 @Service
@@ -23,13 +25,13 @@ public class FacultyService {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
-	public ResponseEntity<String> registerFaculty(FacultyDTO facultyDto){
+	public ResponseEntity<Map<String, Object>> registerFaculty(FacultyDTO facultyDto){
 		
 		Optional<Faculty> isExistingFaculty = facultyRepository.findByEmail(facultyDto.getEmail());
 		
 		if(isExistingFaculty.isPresent()) {
 			return ResponseEntity.status(HttpStatus.FOUND)
-					.body("This E-mail is already exists!");
+					.body(Map.of("message","This E-mail already exists, please try another one!"));
 		}else {
 			Faculty faculty = new Faculty();
 			faculty.setName(facultyDto.getName());
@@ -39,10 +41,13 @@ public class FacultyService {
 			faculty.setDesignation(facultyDto.getDesignation());
 			faculty.setDepartment(facultyDto.getDepartment());
 			
+			faculty.setRole(Role.FACULTY);
+			
 			facultyRepository.save(faculty);
 			
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body("Faculty Registration Successful!");
+					.body(Map.of("message","Faculty Registration Successful!",
+							"role",faculty.getRole()));
 		}
 		
 	}
