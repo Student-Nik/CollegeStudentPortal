@@ -9,6 +9,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.college.student.portal.dto.ApiResponse;
+import com.college.student.portal.dto.JwtLoginResponse;
+import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.dto.StudentDTO;
 import com.college.student.portal.entity.Student;
 import com.college.student.portal.enums.Role;
@@ -62,7 +65,14 @@ public class StudentService {
 		}	
 	}
 	
-	
+//	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginStudent(LoginRequest loginRequest){
+//		
+//		try {
+//			authenticationManager.authenticate(new )
+//		}catch() {
+//			
+//		}
+//	}
 	
 	
 }
