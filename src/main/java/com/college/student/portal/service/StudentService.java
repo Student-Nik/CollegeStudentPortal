@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import com.college.student.portal.entity.Student;
 import com.college.student.portal.enums.Role;
 import com.college.student.portal.repository.StudentRepository;
 import com.college.student.portal.security.JwtUtil;
+import com.college.student.portal.security.StudentUserDetails;
 
 @Service
 public class StudentService {
@@ -35,6 +38,7 @@ public class StudentService {
 		this.authenticationManager = authenticationManager;
 	}
 
+	// Register Student
 	public ResponseEntity<Map<String,Object>> registerStudent(StudentDTO studentDto){
 		
 		Optional<Student> isExistingStudent = studentRepository.findByEmail(studentDto.getEmail());
@@ -65,14 +69,45 @@ public class StudentService {
 		}	
 	}
 	
-//	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginStudent(LoginRequest loginRequest){
-//		
-//		try {
-//			authenticationManager.authenticate(new )
-//		}catch() {
-//			
-//		}
-//	}
+	//Login Student
+	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginStudent(LoginRequest loginRequest){
+		
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							loginRequest.getEmail(),
+							loginRequest.getPassword()
+							));
+		
+			Student student = studentRepository.findByEmail(loginRequest.getEmail())
+					.orElseThrow(() -> new RuntimeException("Student not found!"));
+			
+			StudentUserDetails userDetails = new StudentUserDetails(student);
+			
+			String token = jwtUtil.createToken(userDetails.getUsername());
+
+            JwtLoginResponse jwtResponse = new JwtLoginResponse();
+            jwtResponse.setToken(token);
+            jwtResponse.setUsername(student.getEmail());
+            jwtResponse.setRole(student.getRole());
+
+            return ResponseEntity.ok(
+                    new ApiResponse<>(
+                            true,
+                            "Login successful!",
+                            jwtResponse
+                    )
+            );
+			
+		}catch(BadCredentialsException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(
+                            false,
+                            "Invalid Credentials!",
+                            null
+                    ));
+		}
+	}
 	
 	
 }
