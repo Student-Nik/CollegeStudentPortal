@@ -66,7 +66,7 @@ public class AdminService {
 	}
 	
 	// Login Admin
-	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginFaculty(LoginRequest loginRequest){
+	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginAdmin(LoginRequest loginRequest){
 		
 		try {
 			

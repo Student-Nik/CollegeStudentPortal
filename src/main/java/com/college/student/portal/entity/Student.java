@@ -2,6 +2,8 @@ package com.college.student.portal.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.college.student.portal.enums.Role;
 
 import jakarta.persistence.Entity;
@@ -33,6 +35,8 @@ public class Student {
 	private String semester;
 	private String branch;
 	private String address;
+	
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	@Enumerated(EnumType.STRING)

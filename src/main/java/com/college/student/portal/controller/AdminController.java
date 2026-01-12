@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.college.student.portal.dto.AdminDTO;
+import com.college.student.portal.dto.ApiResponse;
+import com.college.student.portal.dto.JwtLoginResponse;
+import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.service.AdminService;
 
 import jakarta.validation.Valid;
@@ -24,5 +27,10 @@ public class AdminController {
 	@PostMapping("/api/auth/admin/register")
 	public ResponseEntity<Map<String, Object>> registerAdmin(@Valid @RequestBody AdminDTO adminDto){
 		return adminService.registerAdmin(adminDto);
+	}
+	
+	@PostMapping("/api/auth/admin/login")
+	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginStudent(@RequestBody LoginRequest loginRequest){
+		return adminService.loginAdmin(loginRequest);
 	}
 }
