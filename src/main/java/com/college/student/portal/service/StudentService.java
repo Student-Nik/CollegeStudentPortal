@@ -1,5 +1,6 @@
 package com.college.student.portal.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -107,6 +108,16 @@ public class StudentService {
                             null
                     ));
 		}
+	}
+	
+	// Show all Student
+	public List<Student> showStudent(){
+		return studentRepository.findAll();
+	}
+	
+	// Show Individual Student by Id
+	public Optional<Student> showStudent(int id) {
+		return studentRepository.findById(id);
 	}
 	
 	

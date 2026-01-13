@@ -70,6 +70,7 @@ public class SecurityConfig {
                         "/error",
                         "/contact/**"
                 ).permitAll()
+                .requestMatchers("/api/show/").hasRole("STUDENT")
                 .anyRequest().authenticated()
             )
 
