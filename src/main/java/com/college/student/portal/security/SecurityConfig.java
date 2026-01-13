@@ -27,20 +27,20 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    // 🔐 Password Encoder
+    //  Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 🔐 Authentication Manager
+    //  Authentication Manager
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
-    // 🔐 Security Filter Chain
+    //  Security Filter Chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
