@@ -15,6 +15,7 @@ import com.college.student.portal.dto.ApiResponse;
 import com.college.student.portal.dto.JwtLoginResponse;
 import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.dto.StudentDTO;
+import com.college.student.portal.dto.StudentResponseDTO;
 import com.college.student.portal.entity.Student;
 import com.college.student.portal.service.StudentService;
 
@@ -30,23 +31,27 @@ public class StudentController {
 		this.studentService = studentService;
 	}
 
+	// Register Student
 	@PostMapping("/api/auth/student/register")
 	public ResponseEntity<Map<String, Object>> registerStudent(@Valid @RequestBody StudentDTO studentDto){
 		return studentService.registerStudent(studentDto);
 	}
 	
+	// Login Student
 	@PostMapping("/api/auth/student/login")
 	public ResponseEntity<ApiResponse<JwtLoginResponse>> loginStudent(@RequestBody LoginRequest loginRequest){
 		return studentService.loginStudent(loginRequest);
 	}
 	
+	// Show all Students
 	@GetMapping("/api/show/students")
-	public List<Student> showStudents(){
-		return studentService.showStudent();
+	public List<StudentResponseDTO> showStudents(){
+		return studentService.showStudents();
 	}
 	
+	// Show Individual Student
 	@GetMapping("/api/show/student/{id}")
-	public Optional<Student> showStudent(@PathVariable int id){
+	public Optional<StudentResponseDTO> showStudent(@PathVariable int id){
 		return studentService.showStudent(id);
 	}
 }

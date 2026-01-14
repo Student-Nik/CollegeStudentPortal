@@ -16,6 +16,7 @@ import com.college.student.portal.dto.ApiResponse;
 import com.college.student.portal.dto.JwtLoginResponse;
 import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.dto.StudentDTO;
+import com.college.student.portal.dto.StudentResponseDTO;
 import com.college.student.portal.entity.Student;
 import com.college.student.portal.enums.Role;
 import com.college.student.portal.repository.StudentRepository;
@@ -42,11 +43,13 @@ public class StudentService {
 	// Register Student
 	public ResponseEntity<Map<String,Object>> registerStudent(StudentDTO studentDto){
 		
-		Optional<Student> isExistingStudent = studentRepository.findByEmail(studentDto.getEmail());
+		Optional<Student> isExistingStudentEmail = studentRepository.findByEmail(studentDto.getEmail());
 		
-		if(isExistingStudent.isPresent()) {
+		Optional<Student> isExistingStudentRollNumber = studentRepository.findByRollNumber(studentDto.getRollNumber());
+		
+		if(isExistingStudentEmail.isPresent() || isExistingStudentRollNumber.isPresent()) {
 			return ResponseEntity.status(HttpStatus.FOUND)
-					.body(Map.of("message","This E-mail already exists, please try another one!"));
+					.body(Map.of("message","This E-mail or Roll Number already exists, please try another one!"));
 		}else {
 			Student student = new Student();
 			student.setRollNumber(studentDto.getRollNumber());
@@ -110,15 +113,39 @@ public class StudentService {
 		}
 	}
 	
-	// Show all Student
-	public List<Student> showStudent(){
-		return studentRepository.findAll();
+	// Show all Students
+	public List<StudentResponseDTO> showStudents() {
+	    return studentRepository.findAll()
+	            .stream()
+	            .map(student -> new StudentResponseDTO(
+	                    student.getStudentId(),
+	                    student.getRollNumber(),
+	                    student.getName(),
+	                    student.getEmail(),
+	                    student.getPhone(),
+	                    student.getEnrollYear(),
+	                    student.getSemester(),
+	                    student.getBranch(),
+	                    student.getAddress()
+	            ))
+	            .toList();
 	}
 	
-	// Show Individual Student by Id
-	public Optional<Student> showStudent(int id) {
-		return studentRepository.findById(id);
+	// Show Individual Student by its Id
+	public Optional<StudentResponseDTO> showStudent(int id) {
+	    return studentRepository.findById(id)
+	            .map(student -> new StudentResponseDTO(
+	                    student.getStudentId(),
+	                    student.getRollNumber(),
+	                    student.getName(),
+	                    student.getEmail(),
+	                    student.getPhone(),
+	                    student.getEnrollYear(),
+	                    student.getSemester(),
+	                    student.getBranch(),
+	                    student.getAddress()
+	            ));
 	}
-	
-	
+
+ 
 }

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class StudentDTO {
 
+	private Integer studentId;
+	
     @NotBlank(message = "Roll number is required")
     @Size(min = 3, max = 20, message = "Roll number must be between 3 and 20 characters")
     private String rollNumber;
