@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,5 +54,11 @@ public class StudentController {
 	@GetMapping("/api/show/student/{id}")
 	public Optional<StudentResponseDTO> showStudent(@PathVariable int id){
 		return studentService.showStudent(id);
+	}
+	
+	// Update Student
+	@PatchMapping("/api/update/student/{id}")
+	public ResponseEntity<Map<String, Object>> updateStudent(@Valid @RequestBody StudentDTO studentDto, @PathVariable String id){
+		return studentService.updateStudent(studentDto, id);
 	}
 }

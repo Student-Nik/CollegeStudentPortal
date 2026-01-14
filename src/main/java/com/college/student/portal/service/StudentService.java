@@ -23,6 +23,8 @@ import com.college.student.portal.repository.StudentRepository;
 import com.college.student.portal.security.JwtUtil;
 import com.college.student.portal.security.StudentUserDetails;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class StudentService {
 	
@@ -146,6 +148,31 @@ public class StudentService {
 	                    student.getAddress()
 	            ));
 	}
-
- 
+	
+	// Update Student
+	@Transactional
+	public ResponseEntity<Map<String, Object>> updateStudent(StudentDTO studentDto, String id){
+		
+		Optional<Student> isExistingStudent = studentRepository.findByEmail(id);
+		
+		if(isExistingStudent.isPresent()) {
+			
+			Student student = isExistingStudent.get();
+			student.setPhone(studentDto.getPhone());
+			student.setAddress(studentDto.getAddress());
+			
+			studentRepository.save(student);
+			
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(Map.of("message","Student Phone and Address updated Successfully!",
+							"student",studentDto));
+		}else {
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(Map.of("message","Student not found!"));
+		
+		}
+		
+	}
+	 
 }
