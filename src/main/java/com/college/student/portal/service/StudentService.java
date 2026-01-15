@@ -17,6 +17,7 @@ import com.college.student.portal.dto.JwtLoginResponse;
 import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.dto.StudentDTO;
 import com.college.student.portal.dto.StudentResponseDTO;
+import com.college.student.portal.dto.StudentUpdateDTO;
 import com.college.student.portal.entity.Student;
 import com.college.student.portal.enums.Role;
 import com.college.student.portal.repository.StudentRepository;
@@ -151,21 +152,21 @@ public class StudentService {
 	
 	// Update Student
 	@Transactional
-	public ResponseEntity<Map<String, Object>> updateStudent(StudentDTO studentDto, String id){
+	public ResponseEntity<Map<String, Object>> updateStudent(StudentUpdateDTO studentUpdateDto, int id){
 		
-		Optional<Student> isExistingStudent = studentRepository.findByEmail(id);
+		Optional<Student> isExistingStudent = studentRepository.findById(id);
 		
 		if(isExistingStudent.isPresent()) {
 			
 			Student student = isExistingStudent.get();
-			student.setPhone(studentDto.getPhone());
-			student.setAddress(studentDto.getAddress());
+			student.setPhone(studentUpdateDto.getPhone());
+			student.setAddress(studentUpdateDto.getAddress());
 			
 			studentRepository.save(student);
 			
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(Map.of("message","Student Phone and Address updated Successfully!",
-							"student",studentDto));
+							"student",studentUpdateDto));
 		}else {
 			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

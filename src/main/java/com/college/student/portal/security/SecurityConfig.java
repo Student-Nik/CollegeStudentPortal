@@ -63,16 +63,32 @@ public class SecurityConfig {
 
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/error",
-                        "/contact/**"
-                ).permitAll()
-                .requestMatchers("/api/show/").hasRole("STUDENT")
-                .anyRequest().authenticated()
-            )
+
+            	    // Public APIs
+            	    .requestMatchers(
+            	        "/api/auth/**",
+            	        "/swagger-ui/**",
+            	        "/v3/api-docs/**",
+            	        "/error",
+            	        "/contact/**"
+            	    ).permitAll()
+
+            	    // Show all students
+            	    .requestMatchers("/api/show/students")
+            	        .hasAnyRole("ADMIN", "FACULTY")
+
+            	    // Show single student
+            	    .requestMatchers("/api/show/student/**")
+            	        .hasAnyRole("ADMIN", "FACULTY", "STUDENT")
+
+            	    // Update student
+            	    .requestMatchers("/api/update/student/**")
+            	        .hasAnyRole("ADMIN", "STUDENT")
+
+            	    // Everything else
+            	    .anyRequest().authenticated()
+            	)
+
 
             // Stateless session (JWT)
             .sessionManagement(session ->

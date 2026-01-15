@@ -17,6 +17,7 @@ import com.college.student.portal.dto.JwtLoginResponse;
 import com.college.student.portal.dto.LoginRequest;
 import com.college.student.portal.dto.StudentDTO;
 import com.college.student.portal.dto.StudentResponseDTO;
+import com.college.student.portal.dto.StudentUpdateDTO;
 import com.college.student.portal.entity.Student;
 import com.college.student.portal.service.StudentService;
 
@@ -58,7 +59,7 @@ public class StudentController {
 	
 	// Update Student
 	@PatchMapping("/api/update/student/{id}")
-	public ResponseEntity<Map<String, Object>> updateStudent(@Valid @RequestBody StudentDTO studentDto, @PathVariable String id){
-		return studentService.updateStudent(studentDto, id);
+	public ResponseEntity<Map<String, Object>> updateStudent(@Valid @RequestBody StudentUpdateDTO studentUpdateDto, @PathVariable int id){
+		return studentService.updateStudent(studentUpdateDto, id);
 	}
 }
