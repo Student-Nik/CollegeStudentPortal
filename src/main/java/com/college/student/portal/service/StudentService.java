@@ -175,5 +175,25 @@ public class StudentService {
 		}
 		
 	}
+	
+	public List<StudentResponseDTO> getStudentByBranchAndSemester(String branch, String semester){
+		
+		List<Student> students = studentRepository.findByBranchAndSemester(branch, semester);
+		
+		return students.stream()
+	            .map(student -> new StudentResponseDTO(
+	                    student.getStudentId(),
+	                    student.getRollNumber(),
+	                    student.getName(),
+	                    student.getEmail(),
+	                    student.getPhone(),
+	                    student.getEnrollYear(),
+	                    student.getSemester(),
+	                    student.getBranch(),
+	                    student.getAddress()
+	            ))
+	            .toList();
+	}
+	
 	 
 }

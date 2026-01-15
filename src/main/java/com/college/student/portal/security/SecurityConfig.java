@@ -84,6 +84,9 @@ public class SecurityConfig {
             	    // Update student
             	    .requestMatchers("/api/update/student/**")
             	        .hasAnyRole("ADMIN", "STUDENT")
+            	        
+            	    .requestMatchers("/api/admin/**")
+            	       .hasAnyRole("ADMIN")
 
             	    // Everything else
             	    .anyRequest().authenticated()
