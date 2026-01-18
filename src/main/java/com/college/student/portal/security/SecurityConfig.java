@@ -87,6 +87,8 @@ public class SecurityConfig {
             	        
             	    .requestMatchers("/api/admin/**")
             	       .hasAnyRole("ADMIN")
+            	       
+            	    
 
             	    // Everything else
             	    .anyRequest().authenticated()
