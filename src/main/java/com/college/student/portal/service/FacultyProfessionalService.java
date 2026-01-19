@@ -67,7 +67,7 @@ public class FacultyProfessionalService {
 
         FacultyProfessional fac = facultyProfessionalRepository
                 .findByEmployeeId(employeeId)
-                .orElseThrow(() -> new RuntimeException("Employee Id not found "+ employeeId));
+                .orElseThrow(() -> new RuntimeException("Employee Id not found: "+ employeeId));
 
         return new FacultyProfessionalResponseDTO(
                 fac.getEmployeeId(),
