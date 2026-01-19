@@ -54,7 +54,7 @@ public class StudentController {
 	
 	// Show Individual Student
 	@GetMapping("/api/show/student/{id}")
-	public Optional<StudentResponseDTO> showStudent(@PathVariable int id){
+	public StudentResponseDTO showStudent(@PathVariable int id){
 		return studentService.showStudent(id);
 	}
 	

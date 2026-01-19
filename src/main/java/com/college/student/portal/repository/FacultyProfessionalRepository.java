@@ -12,4 +12,6 @@ import com.college.student.portal.entity.FacultyProfessional;
 public interface FacultyProfessionalRepository extends JpaRepository<FacultyProfessional, Integer>{
 
 	Optional<FacultyProfessional> findByFaculty(Faculty faculty);
+	
+	Optional<FacultyProfessional> findByEmployeeId(String employeeId);
 }

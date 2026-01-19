@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.FacultyProfessionalDTO;
+import com.college.student.portal.dto.FacultyProfessionalResponseDTO;
 import com.college.student.portal.entity.Faculty;
 import com.college.student.portal.entity.FacultyProfessional;
 import com.college.student.portal.repository.FacultyProfessionalRepository;
@@ -25,6 +26,7 @@ public class FacultyProfessionalService {
         this.facultyRepository = facultyRepository;
     }
 
+    // Create Professional Faculty
     public ResponseEntity<Map<String, Object>> createFacultyProfessional(
             FacultyProfessionalDTO dto) {
 
@@ -59,4 +61,22 @@ public class FacultyProfessionalService {
                         "employeeId", facultyProfessional.getEmployeeId()
                 ));
     }
+    
+    // Get Professional Faculty by Employee Id
+    public FacultyProfessionalResponseDTO getFacultyProfessional(String employeeId) {
+
+        FacultyProfessional fac = facultyProfessionalRepository
+                .findByEmployeeId(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee Id not found "+ employeeId));
+
+        return new FacultyProfessionalResponseDTO(
+                fac.getEmployeeId(),
+                fac.getDesignation(),
+                fac.getDepartment(),
+                fac.getJoiningDate(),
+                fac.getSalary()
+        );
+    }
+
+	
 }

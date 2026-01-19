@@ -135,20 +135,24 @@ public class StudentService {
 	}
 	
 	// Show Individual Student by its Id
-	public Optional<StudentResponseDTO> showStudent(int id) {
-	    return studentRepository.findById(id)
-	            .map(student -> new StudentResponseDTO(
-	                    student.getStudentId(),
-	                    student.getRollNumber(),
-	                    student.getName(),
-	                    student.getEmail(),
-	                    student.getPhone(),
-	                    student.getEnrollYear(),
-	                    student.getSemester(),
-	                    student.getBranch(),
-	                    student.getAddress()
-	            ));
+	public StudentResponseDTO showStudent(int id) {
+
+	    Student student = studentRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Id not found: "+id));
+
+	    return new StudentResponseDTO(
+	            student.getStudentId(),
+	            student.getRollNumber(),
+	            student.getName(),
+	            student.getEmail(),
+	            student.getPhone(),
+	            student.getEnrollYear(),
+	            student.getSemester(),
+	            student.getBranch(),
+	            student.getAddress()
+	    );
 	}
+
 	
 	// Update Student
 	@Transactional
