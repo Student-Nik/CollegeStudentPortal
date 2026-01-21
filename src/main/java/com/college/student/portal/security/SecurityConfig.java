@@ -90,6 +90,9 @@ public class SecurityConfig {
             	       
             	    .requestMatchers("/api/subjects/**")
             	     .hasAnyRole("ADMIN","FACULTY")
+            	     
+            	     .requestMatchers("/api/faculty/**")
+            	     .hasAnyRole("ADMIN","FACULTY")
             	       
             	    
 

@@ -1,5 +1,6 @@
 package com.college.student.portal.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -7,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.FacultySubjectDTO;
+import com.college.student.portal.dto.FacultySubjectsResponseDTO;
 import com.college.student.portal.entity.FacultyProfessional;
 import com.college.student.portal.entity.FacultySubject;
 import com.college.student.portal.entity.Subject;
 import com.college.student.portal.repository.FacultyProfessionalRepository;
+import com.college.student.portal.repository.FacultyRepository;
 import com.college.student.portal.repository.FacultySubjectRepository;
 import com.college.student.portal.repository.SubjectRepository;
 
@@ -20,13 +23,17 @@ public class FacultySubjectService {
 	private final FacultySubjectRepository facultySubjectRepository;
 	private final FacultyProfessionalRepository facultyProfessionalRepository;
 	private final SubjectRepository subjectRepository;
+	private final FacultyRepository facultyRepository;
+	
 	
 	public FacultySubjectService(FacultySubjectRepository facultySubjectRepository,
-			FacultyProfessionalRepository facultyProfessionalRepository, SubjectRepository subjectRepository) {
+			FacultyProfessionalRepository facultyProfessionalRepository, SubjectRepository subjectRepository,
+			FacultyRepository facultyRepository) {
 		super();
 		this.facultySubjectRepository = facultySubjectRepository;
 		this.facultyProfessionalRepository = facultyProfessionalRepository;
 		this.subjectRepository = subjectRepository;
+		this.facultyRepository = facultyRepository;
 	}
 
 	// Assign Subject to Faculty
@@ -62,5 +69,16 @@ public class FacultySubjectService {
 	                    "id", fs.getId()
 	            ));
 	}
+	
+	// Fetch Subject Details by Faculty Id
+	public List<FacultySubjectsResponseDTO> getSubjectsByFacultyId(Integer facultyId) {
+
+	    if (!facultyRepository.existsById(facultyId)) {
+	        throw new RuntimeException("FacultyId not found!");
+	    }
+
+	    return facultySubjectRepository.findSubjectsByFacultyId(facultyId);
+	}
+
 
 }
