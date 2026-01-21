@@ -1,5 +1,6 @@
 package com.college.student.portal.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.SubjectDTO;
+import com.college.student.portal.dto.SubjectsResponseDTO;
 import com.college.student.portal.entity.Subject;
 import com.college.student.portal.repository.SubjectRepository;
 
@@ -49,4 +51,19 @@ public class SubjectService {
 	    }
 	}
 
+	// Get Subjects by Department and Semester
+	public List<SubjectsResponseDTO> getSubjectsByDepartmentAndSemester(String department, String semester){
+		
+		List<Subject> subjects = subjectRepository.findByDepartmentAndSemester(department, semester);
+		
+		return subjects.stream()
+				.map(subject -> new SubjectsResponseDTO(
+						subject.getCode(),
+						subject.getName(),
+						subject.getCredits(),
+						subject.getSemester(),
+						subject.getDepartment()
+						))
+				.toList();
+	}
 }
