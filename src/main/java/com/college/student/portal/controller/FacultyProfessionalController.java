@@ -1,5 +1,6 @@
 package com.college.student.portal.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,6 +41,12 @@ public class FacultyProfessionalController {
 	    return ResponseEntity.ok(
 	            facultyProfessionalService.getFacultyProfessional(employeeId)
 	    );
+	}
+	
+	// Get Professional Faculty by Department
+	@GetMapping("/api/faculty/{department}")
+	public List<FacultyProfessionalResponseDTO> getFacultiesByDepartment(@PathVariable String department){
+		return facultyProfessionalService.getFacultyByDepartment(department);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.college.student.portal.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -78,5 +79,20 @@ public class FacultyProfessionalService {
         );
     }
 
+    // Get Professional Faculty List by Department
+    public List<FacultyProfessionalResponseDTO> getFacultyByDepartment(String department){
+    	
+    	List<FacultyProfessional> faculties = facultyProfessionalRepository.findByDepartment(department);
+    	
+    	return faculties.stream()
+    			.map(facu -> new FacultyProfessionalResponseDTO (
+    					facu.getEmployeeId(),
+    					facu.getDesignation(),
+    					facu.getDepartment(),
+    					facu.getJoiningDate(),
+    					facu.getSalary()
+    					))
+    			.toList();
+    }
 	
 }
