@@ -35,7 +35,7 @@ public class FacultyProfessionalService {
         Faculty faculty = facultyRepository.findById(dto.getFacultyPersonalId())
                 .orElseThrow(() -> new RuntimeException("Faculty personal not found"));
 
-        // Check if Professional already exists
+        // Check if Professional faculty already exists
         Optional<FacultyProfessional> existing =
                 facultyProfessionalRepository.findByFaculty(faculty);
 
