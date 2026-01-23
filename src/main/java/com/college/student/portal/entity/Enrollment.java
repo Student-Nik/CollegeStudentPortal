@@ -2,7 +2,11 @@ package com.college.student.portal.entity;
 
 import java.time.LocalDate;
 
+import com.college.student.portal.enums.EnrollmentStatus;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,22 +21,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Course {
+public class Enrollment {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	private String code;
-	private String name;
-	private String semester;
-	private int credits;
-	private String department;
-	private String academicYear;
-	private LocalDate startDate;
-	private LocalDate endDate;
+	private LocalDate enrollDate;
+	
+	@Enumerated(EnumType.STRING)
+	private EnrollmentStatus status;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="faculty_id")
-	private FacultyProfessional facultyProfessional;
+	@JoinColumn(name="student_roll")
+	private Student student;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="course_id")
+	private Course course;
 }

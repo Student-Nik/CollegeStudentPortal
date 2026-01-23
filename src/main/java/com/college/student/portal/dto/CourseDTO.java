@@ -28,7 +28,7 @@ public class CourseDTO {
 
     @NotNull(message = "Semester is required")
     @Min(value = 1, message = "Semester must be greater than or equal to 1")
-    private Integer semester;
+    private String semester;
 
     @Min(value = 1, message = "Credits must be at least 1")
     private int credits;
