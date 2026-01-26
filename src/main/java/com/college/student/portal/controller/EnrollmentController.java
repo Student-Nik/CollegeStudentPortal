@@ -3,6 +3,7 @@ package com.college.student.portal.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,12 @@ public class EnrollmentController {
 	        @Valid @RequestBody EnrollmentDTO enrollmentDto) {
 
 	    return enrollmentService.enrollStudent(roll, enrollmentDto);
+	}
+	
+	// Fetch Student Courses
+	@GetMapping("/api/students/{roll}/courses")
+	public Map<String, Object> getStudentCourses(@PathVariable String roll){
+		return enrollmentService.getStudentCourses(roll);
 	}
 
 }

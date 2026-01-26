@@ -1,6 +1,8 @@
 package com.college.student.portal.service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -80,6 +82,35 @@ public class EnrollmentService {
 	                        "enrollmentId", savedEnrollment.getId()   // ← FIXED
 	                ));
 	    }
+	}
+	
+	// Fetch Student Courses (Enrolled + Available Courses)
+	public Map<String, Object> getStudentCourses(String roll) {
+
+	    Student student = studentRepository.findByRollNumber(roll)
+	        .orElseThrow(() -> new RuntimeException("Student not found"));
+
+	    Integer studentId = student.getStudentId();
+
+	    // 1. Enrolled courses
+	    List<Enrollment> enrolled =
+	        enrollmentRepository.findByStudent_StudentIdAndStatus(
+	            studentId, EnrollmentStatus.ACTIVE
+	        );
+
+	    // 2. Available courses
+	    List<Course> available =
+	        courseRepository.findAvailableCourses(
+	            student.getSemester(),
+	            student.getEnrollYear(),   // or derive current academic year properly
+	            studentId
+	        );
+
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("enrolledCourses", enrolled);
+	    response.put("availableCourses", available);
+
+	    return response;
 	}
 
 	
