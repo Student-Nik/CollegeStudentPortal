@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.college.student.portal.dto.CourseStudentsResponseDTO;
 import com.college.student.portal.dto.EnrollmentDTO;
 import com.college.student.portal.service.EnrollmentService;
 
@@ -38,5 +39,11 @@ public class EnrollmentController {
 	public Map<String, Object> getStudentCourses(@PathVariable String roll){
 		return enrollmentService.getStudentCourses(roll);
 	}
+	
+	@GetMapping("/api/courses/{code}/students")
+	public CourseStudentsResponseDTO getCourseStudents(
+	        @PathVariable String code) {
+		return enrollmentService.getStudentsByCourseCode(code);
 
+	}
 }

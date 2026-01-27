@@ -19,5 +19,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 		    Integer studentId,
 		    EnrollmentStatus status
 		);
+	
+	List<Enrollment> findByCourse_Code(String code);
+
 
 }

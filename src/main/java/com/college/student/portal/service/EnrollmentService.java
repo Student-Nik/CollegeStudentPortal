@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.AvailableCoursesResponseDTO;
+import com.college.student.portal.dto.CourseStudentDTO;
+import com.college.student.portal.dto.CourseStudentsResponseDTO;
 import com.college.student.portal.dto.EnrolledCoursesResponseDTO;
 import com.college.student.portal.dto.EnrollmentDTO;
 import com.college.student.portal.entity.Course;
@@ -137,7 +139,31 @@ public class EnrollmentService {
 
 	    return response;
 	}
-
-
 	
+	// Fetch Students by Course Code
+	public CourseStudentsResponseDTO getStudentsByCourseCode(String code) {
+
+	    Course course = courseRepository.findByCode(code)
+	        .orElseThrow(() -> new RuntimeException("Course not found"));
+
+	    List<Enrollment> enrollments =
+	        enrollmentRepository.findByCourse_Code(code);
+
+	    List<CourseStudentDTO> students = enrollments.stream()
+	        .map(e -> new CourseStudentDTO(
+	            e.getStudent().getRollNumber(),
+	            e.getStudent().getName(),
+	            e.getStudent().getEmail(),
+	            e.getEnrollDate(),
+	            e.getStatus()
+	        ))
+	        .toList();
+
+	    return new CourseStudentsResponseDTO(
+	        course.getCode(),
+	        course.getName(),
+	        students.size(),
+	        students
+	    );
+	}
 }
