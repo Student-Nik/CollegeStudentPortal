@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.college.student.portal.dto.AvailableCoursesResponseDTO;
+import com.college.student.portal.dto.EnrolledCoursesResponseDTO;
 import com.college.student.portal.dto.EnrollmentDTO;
 import com.college.student.portal.entity.Course;
 import com.college.student.portal.entity.Enrollment;
@@ -92,26 +94,50 @@ public class EnrollmentService {
 
 	    Integer studentId = student.getStudentId();
 
-	    // 1. Enrolled courses
+	    // 1. Enrolled courses (ENTITY)
 	    List<Enrollment> enrolled =
 	        enrollmentRepository.findByStudent_StudentIdAndStatus(
 	            studentId, EnrollmentStatus.ACTIVE
 	        );
 
-	    // 2. Available courses
+	    // 2. Available courses (ENTITY)
 	    List<Course> available =
 	        courseRepository.findAvailableCourses(
 	            student.getSemester(),
-	            student.getEnrollYear(),   // or derive current academic year properly
+	            student.getEnrollYear(),
 	            studentId
 	        );
 
+	    // Convert enrolled → DTO
+	    List<EnrolledCoursesResponseDTO> enrolledDto = enrolled.stream()
+	        .map(e -> new EnrolledCoursesResponseDTO(
+	            e.getCourse().getId(),
+	            e.getCourse().getCode(),
+	            e.getCourse().getName(),
+	            e.getCourse().getSemester(),
+	            e.getCourse().getCredits(),
+	            e.getStatus().name()
+	        ))
+	        .toList();
+
+	    // Convert available → DTO
+	    List<AvailableCoursesResponseDTO> availableDto = available.stream()
+	        .map(c -> new AvailableCoursesResponseDTO(
+	            c.getId(),
+	            c.getCode(),
+	            c.getName(),
+	            c.getSemester(),
+	            c.getCredits()
+	        ))
+	        .toList();
+
 	    Map<String, Object> response = new HashMap<>();
-	    response.put("enrolledCourses", enrolled);
-	    response.put("availableCourses", available);
+	    response.put("enrolledCourses", enrolledDto);
+	    response.put("availableCourses", availableDto);
 
 	    return response;
 	}
+
 
 	
 }
