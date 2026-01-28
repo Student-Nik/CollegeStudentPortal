@@ -1,6 +1,7 @@
 package com.college.student.portal.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 	        LocalDate date,
 	        Course course
 	);
+	
+	List<Attendance> findByCourseAndDateBetween(
+	        Course course,
+	        LocalDate startDate,
+	        LocalDate endDate
+	);
+
 
 }
