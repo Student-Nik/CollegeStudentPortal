@@ -33,11 +33,11 @@ public class InternalMarksService {
 	// Enter Internal Marks
 	public ResponseEntity<Map<String, Object>> enterInternalMarks(
 	        InternalMarksDTO internalMarksDto,
-	        String studentRollNo,
+	        String studentRoll,
 	        Integer courseId
 	) {
 
-	    Student student = studentRepository.findByRollNumber(studentRollNo)
+	    Student student = studentRepository.findByRollNumber(studentRoll)
 	            .orElseThrow(() -> new RuntimeException("Student not found!"));
 
 	    Course course = courseRepository.findById(courseId)
