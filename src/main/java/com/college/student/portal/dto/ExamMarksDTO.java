@@ -28,4 +28,6 @@ public class ExamMarksDTO {
 
     @NotNull(message = "Course ID is required")
     private Integer courseId;
+    
+    private int totalMarks;
 }

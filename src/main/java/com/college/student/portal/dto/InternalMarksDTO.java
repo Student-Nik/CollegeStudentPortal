@@ -40,4 +40,6 @@ public class InternalMarksDTO {
 
     @NotNull(message = "Course ID is required")
     private Integer courseId;
+    
+    private int totalInternal;
 }

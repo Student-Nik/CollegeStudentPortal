@@ -12,6 +12,7 @@ import com.college.student.portal.entity.Student;
 @Repository
 public interface ExamMarksRepository extends JpaRepository<ExamMarks, Integer>{
 
+	Optional<ExamMarks> findByStudent_StudentIdAndCourse_Id(Integer studentId, Integer courseId);
+	
 	Optional<ExamMarks> findByStudentAndCourse(Student student, Course course);
-
 }
