@@ -33,5 +33,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer>{
 			);
 
 
+	List<Course> findBySemester(String semester);
 
 }

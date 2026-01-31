@@ -1,5 +1,10 @@
 package com.college.student.portal.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.CourseDTO;
@@ -33,7 +38,7 @@ public class StudentCourseMarksService {
 		this.examMarksRepository = examMarksRepository;
 	}
 
-	// Fetch Student Mark sheet
+	// Fetch Student Mark sheet for specific Student
 	public StudentCourseMarksResponseDTO getMarkSheetofStudentWithCourse(String studentRoll, String courseCode) {
 		
 		Student student = studentRepository.findByRollNumber(studentRoll)
@@ -85,4 +90,63 @@ public class StudentCourseMarksService {
 
 	    return response;
 	}
+	
+	// Fetch Students Mark sheet by Semester (ADMIN)
+	public List<StudentCourseMarksResponseDTO> getStudentsMarksheet(String semester) {
+
+	    List<Student> students = studentRepository.findBySemester(semester);
+	    List<Course> courses = courseRepository.findBySemester(semester);
+
+	    return students.stream()
+	            .flatMap(student -> courses.stream()
+	                    .map(course -> {
+	                    	Optional<InternalMarks> internalOpt = internalMarksRepository
+	                    	        .findByStudent_StudentIdAndCourse_Id(student.getStudentId(), course.getId());
+	                    	Optional<ExamMarks> examOpt = examMarksRepository
+	                    	        .findByStudent_StudentIdAndCourse_Id(student.getStudentId(), course.getId());
+
+	                    	if (internalOpt.isEmpty() || examOpt.isEmpty()) return null;
+	                    	InternalMarks internalMarks = internalOpt.get();
+	                    	ExamMarks examMarks = examOpt.get();
+
+	                        StudentCourseMarksResponseDTO dto = new StudentCourseMarksResponseDTO();
+	                        dto.setRollNumber(student.getRollNumber());
+	                        dto.setStudentName(student.getName());
+
+	                       
+	                        CourseDTO courseDTO = new CourseDTO();
+	                        courseDTO.setId(course.getId());
+	                        courseDTO.setCode(course.getCode());
+	                        courseDTO.setName(course.getName());
+	                        courseDTO.setSemester(course.getSemester());
+	                        dto.setCourse(courseDTO);
+
+	                      
+	                        InternalMarksDTO internalDTO = new InternalMarksDTO();
+	                        internalDTO.setQuiz1(internalMarks.getQuiz1());
+	                        internalDTO.setQuiz2(internalMarks.getQuiz2());
+	                        internalDTO.setAssignment1(internalMarks.getAssignment1());
+	                        internalDTO.setAssignment2(internalMarks.getAssignment2());
+	                        internalDTO.setMidSem(internalMarks.getMidSem());
+	                        internalDTO.setTotalInternal(internalMarks.getTotalInternal());
+	                        dto.setInternalMarksDto(internalDTO);
+
+	                       
+	                        ExamMarksDTO examDTO = new ExamMarksDTO();
+	                        examDTO.setEndSemMarks(examMarks.getEndSemMarks());
+	                        examDTO.setTotalMarks(examMarks.getTotalMarks());
+	                        dto.setExamMarksDTO(examDTO);
+
+	                   
+	                        String grade = GradeUtil.calculateGrade(examMarks.getTotalMarks());
+	                        dto.setGrade(grade);
+
+	                        return dto;
+	                    })
+	                    .filter(Objects::nonNull) 
+	            )
+	            .collect(Collectors.toList());
+	}
+
+
 }
