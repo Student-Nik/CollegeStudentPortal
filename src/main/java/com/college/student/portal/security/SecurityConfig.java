@@ -107,7 +107,6 @@ public class SecurityConfig {
             	    .anyRequest().authenticated()
             	)
 
-
             // Stateless session (JWT)
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
