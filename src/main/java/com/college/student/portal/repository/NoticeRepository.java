@@ -1,6 +1,7 @@
 package com.college.student.portal.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer>{
 		    TargetAudience target,
 		    LocalDate postedDate
 		);
+	
+	List<Notice> findByTarget(TargetAudience target);
 
 }

@@ -1,6 +1,7 @@
 package com.college.student.portal.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.college.student.portal.dto.NoticeDTO;
+import com.college.student.portal.dto.NoticeResponseDTO;
 import com.college.student.portal.entity.Admin;
 import com.college.student.portal.entity.Notice;
+import com.college.student.portal.enums.TargetAudience;
 import com.college.student.portal.repository.AdminRepository;
 import com.college.student.portal.repository.NoticeRepository;
 
@@ -53,4 +56,18 @@ public class NoticeService {
 		
 	}
 	
+	// GET notice by Target
+	public List<NoticeResponseDTO> getNoticeByTarget(TargetAudience target) {
+
+	    return noticeRepository.findByTarget(target)
+	            .stream()
+	            .map(notice -> new NoticeResponseDTO(
+	                    notice.getTitle(),
+	                    notice.getContent(),
+	                    notice.getPostedDate(),
+	                    notice.getExpiryDate()
+	            ))
+	            .toList();
+	}
+
 }
