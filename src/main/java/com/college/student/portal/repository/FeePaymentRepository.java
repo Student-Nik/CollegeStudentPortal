@@ -21,4 +21,5 @@ public interface FeePaymentRepository extends JpaRepository<FeePayment, Integer>
 	List<FeePayment> findByStudent_RollNumberAndFeeStructure_Id(String studentRoll, Integer feeStructureId);
 
 
+	List<FeePayment> findByStudent_RollNumberOrderByPaymentDateDesc(String rollNumber);
 }

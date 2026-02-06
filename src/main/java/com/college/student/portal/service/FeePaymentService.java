@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.college.student.portal.dto.FeeHistoryResponseDTO;
 import com.college.student.portal.dto.FeePaymentDTO;
 import com.college.student.portal.dto.FeesDueResponseDTO;
 import com.college.student.portal.entity.FeePayment;
@@ -108,5 +109,22 @@ public class FeePaymentService {
 
 	    return feesDueList;
 	}
+	
+	// Fee Payment History
+	public List<FeeHistoryResponseDTO> getFeeHistoryForStudent(String studentRoll) {
+
+        List<FeePayment> payments = feePaymentRepository
+                .findByStudent_RollNumberOrderByPaymentDateDesc(studentRoll);
+
+        return payments.stream().map(fp -> new FeeHistoryResponseDTO(
+                fp.getFeeStructure().getSemester() + "", 
+                fp.getFeeStructure().getTotalFee(),
+                fp.getAmountPaid(),
+                fp.getPaymentMode(),
+                fp.getPaymentStatus(),
+                fp.getReceiptNumber(),
+                fp.getPaymentDate()
+        )).collect(Collectors.toList());
+    }
 
 }

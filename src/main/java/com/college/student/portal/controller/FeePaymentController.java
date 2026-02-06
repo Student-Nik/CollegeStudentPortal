@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.college.student.portal.dto.FeeHistoryResponseDTO;
 import com.college.student.portal.dto.FeePaymentDTO;
 import com.college.student.portal.dto.FeesDueResponseDTO;
 import com.college.student.portal.service.FeePaymentService;
@@ -40,6 +41,12 @@ public class FeePaymentController {
 	@GetMapping("/api/students/{studentRoll}/fees-due")
 	public List<FeesDueResponseDTO> getFeeDue(@PathVariable String studentRoll){
 		return feePaymentService.getFeeDueForStudent(studentRoll);
+	}
+	
+	// Fee Payment History
+	@GetMapping("/api/students/{studentRoll}/fee-history")
+	public List<FeeHistoryResponseDTO> getFeeHistory(@PathVariable String studentRoll){
+		return feePaymentService.getFeeHistoryForStudent(studentRoll);
 	}
 	
 }
