@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.college.student.portal.dto.FeeHistoryResponseDTO;
 import com.college.student.portal.dto.FeePaymentDTO;
 import com.college.student.portal.dto.FeesDueResponseDTO;
+import com.college.student.portal.dto.SemesterFeeReportsResponseDTO;
 import com.college.student.portal.entity.FeePayment;
 import com.college.student.portal.entity.FeeStructure;
 import com.college.student.portal.entity.Student;
@@ -126,5 +127,39 @@ public class FeePaymentService {
                 fp.getPaymentDate()
         )).collect(Collectors.toList());
     }
+	
+	// Fee Reports for Admin
+	
+	public SemesterFeeReportsResponseDTO getFeeReports(String semester) {
+		
+		List<FeeStructure> feeStructures = feeStructureRepository.findBySemester(semester);
+		
+		double totalExpected = feeStructures
+				.stream()
+				.mapToDouble(FeeStructure::getTotalFee)
+	            .sum();
+		
+		List<FeePayment> payments = feePaymentRepository.findByFeeStructure_Semester(semester);
+		
+		double totalCollected = payments.stream()
+	            .filter(p -> p.getPaymentStatus() == PaymentStatus.PAID)
+	            .mapToDouble(FeePayment::getAmountPaid)
+	            .sum();
+
+	    int totalStudents = (int) payments.stream()
+	            .map(p -> p.getStudent().getRollNumber())
+	            .distinct()
+	            .count();
+
+	    double totalPending = totalExpected - totalCollected;
+
+	    return new SemesterFeeReportsResponseDTO(
+	            semester,
+	            totalStudents,
+	            totalExpected,
+	            totalCollected,
+	            totalPending
+	    );
+	}
 
 }

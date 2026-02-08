@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.college.student.portal.dto.FeeHistoryResponseDTO;
 import com.college.student.portal.dto.FeePaymentDTO;
 import com.college.student.portal.dto.FeesDueResponseDTO;
+import com.college.student.portal.dto.SemesterFeeReportsResponseDTO;
 import com.college.student.portal.service.FeePaymentService;
 
 import jakarta.validation.Valid;
@@ -49,4 +50,9 @@ public class FeePaymentController {
 		return feePaymentService.getFeeHistoryForStudent(studentRoll);
 	}
 	
+	// Fee Reports for Admin
+	@GetMapping("/api/admin/fee-reports/semester/{semester}")
+	public SemesterFeeReportsResponseDTO getFeeReports(@PathVariable String semester) {
+		return feePaymentService.getFeeReports(semester);
+	}
 }

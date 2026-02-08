@@ -1,5 +1,6 @@
 package com.college.student.portal.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ import com.college.student.portal.entity.FeeStructure;
 public interface FeeStructureRepository extends JpaRepository<FeeStructure, Integer>{
 
 	Optional<FeeStructure> findByAcademicYearAndSemester(String academicYear, String semester);
+	
+	List<FeeStructure> findBySemester(String semester);
 }
